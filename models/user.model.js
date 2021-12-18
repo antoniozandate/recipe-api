@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema(
     password: { type: String, required: true, select: false },
     fullName: { type: String, required: true },
     birthday: { type: Date, required: false },
-    isRestaurant: { type: Boolean, required: true },
+    isRestaurant: { type: Boolean, default: false, required: true },
     restaurantInfo: {
       type: RestaurantInfoSchema,
       required: function () {

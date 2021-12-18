@@ -18,13 +18,15 @@ class UserService {
     return this.getToken({ ...user, username })
   }
 
-  async register({ username, password, email, fullName }) {
+  async register({ username, password, email, fullName, isRestaurant, restaurantInfo}) {
     const hash = await CryptoService.encrypt(password)
     await User.create({
       username,
       password: hash,
       email,
       fullName,
+      isRestaurant,
+      restaurantInfo
     })
     const user = await this.getUser(username)
     return this.getToken({ ...user, username })
@@ -32,7 +34,8 @@ class UserService {
 
   getToken(user) {
     return {
-      token: jwt.sign(this.getTokenProps(user), config.secret)
+      token: jwt.sign(this.getTokenProps(user), config.secret),
+      ...this.getTokenProps(user)
     }
   }
 

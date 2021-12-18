@@ -5,7 +5,7 @@ class MenuitemController {
   async get(req, res, next) {
     try {
       const result = await MenuitemService.get(req.query)
-      res.status(200).json({ menuitems: result })
+      res.status(200).json(result )
     } catch (error) {
       next(error)
     }

@@ -9,6 +9,10 @@ const config = require('../config')
 
 
 router.use((req, res, next) => {
+	const url = req.originalUrl
+	if (url === '/api/login' || url === '/api/register' || url === '/api/register/restaurant') {
+		return next()
+	}
 	const authorization = req.headers.authorization
 	const isValid = /^Bearer\s+[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/i.test(authorization)
 	if (!isValid) {

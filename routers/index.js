@@ -3,11 +3,30 @@ const UserRouter = require('./user.router')
 const menuitemRouter = require('./menuitem.router')
 const PreviewRouter = require('./preview.router')
 const RestaurantRouter = require('./restaurant.router')
+const OrderRouter = require('./order.router')
+const jsonwebtoken = require('jsonwebtoken')
+const config = require('../config')
+
+
+router.use((req, res, next) => {
+	const authorization = req.headers.authorization
+	const isValid = /^Bearer\s+[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/i.test(authorization)
+	if (!isValid) {
+		return next({message: 'Invalid authorization header', status: 401})
+	}
+	const token = authorization.split(' ').pop()
+	const user = jsonwebtoken.decode(token, config.jwt.secret)
+
+	req.user = user
+
+	next()
+})
 
 router.use(UserRouter)
 router.use(menuitemRouter)
 router.use(PreviewRouter)
 router.use(RestaurantRouter)
+router.use(OrderRouter)
 
 router.use((err, req, res, next) => {
 	if (err.name === 'UnauthorizedError') {
